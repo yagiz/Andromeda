@@ -8,7 +8,7 @@ UIController = function(parameters)
   this.info = document.getElementById("info");
   this.control = document.getElementById("control");
   this.canvascontainer = document.getElementById("canvascontainer");
-  this.fullscreenButton = document.getElementById("toggleFullScreen");
+  this.fullscreenButton = document.getElementById("fullscreenButton");
 }
 
 UIController.prototype.showOpeningInfo = function()

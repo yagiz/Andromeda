@@ -21,18 +21,14 @@ window.onload = function(e)
 
   function checkPlayerTime()
   {
-    console.log();
     if( playerController.isPlayerReady == true &&
         playerController.player.getPlayerState() == 1)
     {
 
       var time = Math.floor(playerController.player.getCurrentTime());
 
-      console.log(time);
-
       if(time == 15 && !animationController.isSceneStateFirstExplosionStarted )
       {
-        console.log("time == 15 && !animationController.isSceneStateFirstExplosionStarted");
         animationController.startSceneStateFirstExplosion();
       }
 
