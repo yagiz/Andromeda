@@ -1,0 +1,177 @@
+<html>
+<head>
+
+	<title>Gorillaz - Andromeda in WebGL</title>
+
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+	<link rel="stylesheet" href="reset.css">
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+	<script src="js/threejs/three.min.js"></script>
+	<script src="js/threejs/EffectComposer.js"></script>
+	<script src="js/threejs/RenderPass.js"></script>
+	<script src="js/threejs/HueSaturationShader.js"></script>
+	<script src="js/threejs/ShaderPass.js"></script>
+	<script src="js/threejs/CopyShader.js"></script>
+
+	<script src="js/tweenjs/tween.js"></script>
+
+	<script src="js/gui/dat.gui.min.js"></script>
+	<script src="js/gui/stats.min.js"></script>
+
+
+
+	<script src="js/objects/PlaneGlow.js"></script>
+	<script src="js/objects/Planet.js"></script>
+
+	<script src="js/objects/SingleMeteor.js"></script>
+	<script src="js/objects/BackMeteorField.js"></script>
+	<script src="js/objects/MovingMeteor.js"></script>
+	<script src="js/objects/MeteorField.js"></script>
+
+	<script src="js/objects/Background.js"></script>
+	<script src="js/objects/Vignette.js"></script>
+
+	<script src="js/scenes/BackgroundScene.js"></script>
+	<script src="js/scenes/BackMeteorsScene.js"></script>
+	<script src="js/scenes/FrontMeteorsScene.js"></script>
+	<script src="js/scenes/PlanetScene.js"></script>
+	<script src="js/scenes/VignetteScene.js"></script>
+
+	<script src="js/controllers/PlayerController.js"></script>
+	<script src="js/controllers/UIController.js"></script>
+	<script src="js/controllers/AnimationController.js"></script>
+
+	<script src="js/Andromeda.js"></script>
+	<script src="js/app.js"></script>
+
+
+	<script id="vertexShader" type="x-shader/x-vertex">
+
+	    varying vec2 vUv;
+	    varying vec2 vN;
+
+	    void main()
+	    {
+	        vUv = uv;
+
+	        vec4 p = vec4( position, 1. );
+
+			  vec3 e = normalize( vec3( modelViewMatrix * p ) );
+			  vec3 n = normalize( normalMatrix * normal );
+
+			  vec3 r = reflect( e, n );
+			  float m = 2. * sqrt(
+			    pow( r.x, 2. ) +
+			    pow( r.y, 2. ) +
+			    pow( r.z + 1., 2. )
+			  );
+			  vN = r.xy / m + .5;
+
+
+	        gl_Position =   projectionMatrix *
+	                        modelViewMatrix *
+	                        vec4(position,1.0);
+	    }
+	</script>
+
+	<script id="fragmentShader" type="x-shader/x-fragment">
+
+	    varying vec2 vUv;
+	    varying vec2 vN;
+
+	    uniform sampler2D planetTexture;
+
+	    uniform sampler2D innerGlowTexture;
+	    uniform float innerGlowAlpha;
+
+	    uniform sampler2D meteorGlowTexture;
+	    uniform float meteorGlowAlpha;
+
+	    uniform sampler2D shadowTexture;
+	    uniform float shadowAlpha;
+
+	    uniform float explosionGlowAlpha;
+
+	    uniform float time;
+
+	    uniform float flowWaveRadius;
+	    uniform float flowIndex;
+
+	    void main()
+	    {
+
+	    	float pi = 3.1415926535897932384626433832795;
+
+	    	float easeBase = ( 1.0 - vUv.y * 0.4);
+
+	    	float ease = pow( easeBase , 6.0 );
+
+	    	float offsetY = ( ease + (sin( (vUv.x + flowIndex) * pi * 4.0 ) * vUv.x * vUv.y + 1.0 )  * flowWaveRadius - time * 0.1);
+
+	    	float vUvY = mod( offsetY * 1000.0,1000.0) / 1000.0;
+
+	    	vec2 offsetUv = vec2(vUv.x, vUvY);
+
+	    	vec4 textureColor = texture2D(planetTexture, offsetUv);
+	    	vec4 innerGlowTextureColor = texture2D(innerGlowTexture, vN);
+	    	vec4 meteorGlowTextureColor = texture2D(meteorGlowTexture, vN);
+	    	vec4 shadowTextureColor = texture2D(shadowTexture, vN);
+
+	    	gl_FragColor = vec4(0, 0, 0, 1.0);
+
+			gl_FragColor = gl_FragColor + textureColor;
+			gl_FragColor = gl_FragColor * (shadowAlpha) + gl_FragColor * (shadowTextureColor * (1.0 - shadowAlpha));
+			gl_FragColor = gl_FragColor + innerGlowTextureColor * innerGlowAlpha;
+			gl_FragColor = gl_FragColor + meteorGlowTextureColor * meteorGlowAlpha;
+			gl_FragColor = gl_FragColor + vec4(explosionGlowAlpha, explosionGlowAlpha, explosionGlowAlpha, explosionGlowAlpha);
+
+	    }
+	</script>
+
+	<div id="container">
+
+		<div id="canvascontainer"></div>
+		<div id="player"></div>
+		<canvas id='planetCanvas'></canvas>
+
+		<div id="overlay">
+
+			<div id="info">
+				<h1 id="title" >Gorillaz - Andromeda<br>in WebGL</h1>
+				<h2 id="description" >This is a WebGL recreation of the popular music video <a target="_blank" href="https://www.youtube.com/watch?v=9W44NWYwa1g">Gorillaz Andromeda</a><br>Check out the <a target="_blank" href="https://www.youtube.com/watch?v=9W44NWYwa1g">story</a> behind this.</h2>
+
+				<h2 id="preloader" >Loading %0</h2>
+
+				<a id="startButton" href="javascript:void(0);">Gorillaz Andromeda</a>
+
+				<br />
+			</div>
+
+			<div id="control">
+				<ul>
+					<li><a id="toggleFullScreen" href="javascript:void(0);">Toggle Fulscreen</a></li>
+					<li><a href="http://yagiz.me/about/">About</a></li>
+					<li><h3 id="warning">Warning</h3></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-18094316-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</html>
