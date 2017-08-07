@@ -8,7 +8,12 @@ UIController = function(parameters)
   this.info = document.getElementById("info");
   this.control = document.getElementById("control");
   this.canvascontainer = document.getElementById("canvascontainer");
-
+  this.fullscreenButton = document.getElementById("toggleFullScreen");
+  
+  // document.getElementById("toggleFullScreen").onclick = function()
+  			// {
+  			// 	fullscreen();
+  			// };
 }
 
 UIController.prototype.showOpeningInfo = function()
@@ -88,4 +93,35 @@ UIController.prototype.showDebugMode = function()
   this.gui.add( this.parameters, "sceneStateFirstExplosion");
   this.gui.add( this.parameters, "sceneStateOtherExplosions");
   this.gui.add( this.parameters, "sceneStateInitial");
+}
+
+UIController.prototype.triggerFullScreen = function()
+{
+  var isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
+      (document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
+      (document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
+      (document.msFullscreenElement && document.msFullscreenElement !== null);
+
+  var docElm = document.documentElement;
+  if (!isInFullScreen) {
+      if (docElm.requestFullscreen) {
+          docElm.requestFullscreen();
+      } else if (docElm.mozRequestFullScreen) {
+          docElm.mozRequestFullScreen();
+      } else if (docElm.webkitRequestFullScreen) {
+          docElm.webkitRequestFullScreen();
+      } else if (docElm.msRequestFullscreen) {
+          docElm.msRequestFullscreen();
+      }
+  } else {
+      if (document.exitFullscreen) {
+          document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+      } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+      }
+  }
 }

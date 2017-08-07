@@ -95,6 +95,11 @@ window.onload = function(e)
     playerController.player.playVideo();
   }
 
+  uiController.fullscreenButton.onclick = function()
+  {
+    uiController.triggerFullScreen();
+  }
+
 
 
   playerController.onPlayerReady = function()
