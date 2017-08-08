@@ -8,17 +8,17 @@ var MeteorField = function(config)
 	var horizontalTravel = 600;
 
 	var loader = new THREE.TextureLoader();
-	
+
 	var material = new THREE.MeshPhongMaterial( {shading: THREE.SmoothShading, color: 0x161616} );
 	material.shininess = 0.2;
 
 	var geometries = [];
 
-	for(var i=0; i<40; i++)
+	for(var i=0; i<config.modelCacheCount; i++)
 	{
 		var size = config.sizeMin + Math.random() * (config.sizeMax - config.sizeMin);
 
-	
+
 		var geometry = new THREE.OctahedronGeometry( size, config.detail);
 
 		for(var b=0; b<geometry.vertices.length; b++)
@@ -27,7 +27,7 @@ var MeteorField = function(config)
 
 			vertice.x = (Math.random()-0.5) * config.randomize + vertice.x;
 			vertice.y = (Math.random()-0.5) * config.randomize + vertice.y;
-			vertice.z = (Math.random()-0.5) * config.randomize + vertice.z;		
+			vertice.z = (Math.random()-0.5) * config.randomize + vertice.z;
 		}
 
 		geometries.push(geometry);
@@ -47,7 +47,7 @@ var MeteorField = function(config)
 		meteor.rotationXSpeed = Math.random()*rotationSpeedFactor + rotationSpeedFactor
 		meteor.rotationYSpeed = Math.random()*rotationSpeedFactor + rotationSpeedFactor;
 		meteor.rotationZSpeed = Math.random()*rotationSpeedFactor + rotationSpeedFactor;
-			
+
 		meteor.horizontalTravel = (1 - meteor.speed) * 800 + 400;
 
 		meteor.container.position.x = (Math.random() - 0.5) * meteor.horizontalTravel * 2;
@@ -67,7 +67,7 @@ var MeteorField = function(config)
 	return this;
 }
 
-MeteorField.prototype.move = function() 
+MeteorField.prototype.move = function()
 {
 	for(var i=0; i<this.meteors.length; i++)
 	{
