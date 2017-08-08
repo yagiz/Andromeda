@@ -81,7 +81,8 @@ AnimationController.prototype.reset = function()
   this.isSceneStateFirstExplosionStarted = false;
   this.isSceneStateOtherFirstExplosionStarted = false;
   this.isSceneStateOtherSecondExplosionStarted = false;
-
+  this.isChangeHueStarted = false;
+  
   TWEEN.removeAll();
   this.sceneStateInitial();
 }
