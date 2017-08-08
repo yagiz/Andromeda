@@ -61,7 +61,7 @@ AnimationController = function(config)
 
     this.sceneStateOtherExplosions = function()
     {
-      weakThis.sceneStateOtherExplosions();
+      weakThis.sceneStateOtherExplosion();
     }
 
     this.sceneStateStable = function()

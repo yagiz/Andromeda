@@ -3,7 +3,7 @@ FrontMeteorsScene = function()
   this.scene = new THREE.Scene();
 
   this.meteorField = new MeteorField({
-    count:400,
+    count:500,
     sizeMin: 0.1,
     sizeMax: 6,
     detail: 1,

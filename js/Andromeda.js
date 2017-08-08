@@ -12,8 +12,8 @@ Andromeda = function(parameters)
 
   this.renderer = new THREE.WebGLRenderer({ alpha: false, antialias:true });
   this.renderer.setClearColor (0x000000, 0);
-  this.renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
-  //this.renderer.setPixelRatio(1);
+  //this.renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
+  this.renderer.setPixelRatio(1);
   this.renderer.setSize( window.innerWidth, window.innerHeight );
   this.renderer.sortObjects = true;
   this.renderer.autoClear = false;
