@@ -37,7 +37,7 @@ window.onload = function(e)
         animationController.startChangeHue();
       }
 
-      if(time == 58 && !animationController.isSceneStateOtherFirstExplosionsStarted )
+      if(time == 58 && !animationController.isSceneStateOtherFirstExplosionStarted )
       {
         animationController.startSceneStateOtherFirstExplosion();
       }
