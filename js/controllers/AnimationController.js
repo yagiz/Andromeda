@@ -259,7 +259,7 @@ AnimationController.prototype.startSceneStateFirstExplosion = function ()
 AnimationController.prototype.startSceneStateOtherFirstExplosion = function ()
 {
   this.sceneStateOtherExplosion();
-  this.isSceneStateOtherFirstExplosionsStarted = true;
+  this.isSceneStateOtherFirstExplosionStarted = true;
 }
 
 AnimationController.prototype.startSceneStateOtherSecondExplosion = function ()
