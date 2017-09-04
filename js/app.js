@@ -88,7 +88,7 @@ window.onload = function(e)
   uiController.startButton.onclick = function()
   {
     uiController.showController();
-    playerController.player.playVideo();
+    playerController.play();
   }
 
   uiController.fullscreenButton.onclick = function()
@@ -115,6 +115,9 @@ window.onload = function(e)
       animationController.reset();
       uiController.showOpeningInfo();
 
+    }else if ( state == 2)
+    {
+      playerController.play();
     }else
     {
       uiController.hideWarning();

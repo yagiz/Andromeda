@@ -35,3 +35,8 @@ PlayerController.prototype.loadPlayer = function ()
     }
   });
 };
+
+PlayerController.prototype.play = function ()
+{
+  this.player.playVideo();
+}
